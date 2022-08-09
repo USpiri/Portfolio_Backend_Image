@@ -4,12 +4,9 @@ import com.portfolio.backenduspiri.model.Image;
 import com.portfolio.backenduspiri.service_interface.IImageService;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
 import com.portfolio.backenduspiri.services.CloudinaryService;
-import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import javax.imageio.ImageIO;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -27,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/image")
-@CrossOrigin( origins = "http://localhost:4200/" )
+@CrossOrigin( origins = "https://uriel-spiridione.web.app/" )
 public class ImageController {
     
     @Autowired

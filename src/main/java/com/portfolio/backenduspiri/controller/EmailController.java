@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin( origins = "http://localhost:4200/" )
+@CrossOrigin( origins = "https://uriel-spiridione.web.app/" )
 public class EmailController {
     
     @Autowired

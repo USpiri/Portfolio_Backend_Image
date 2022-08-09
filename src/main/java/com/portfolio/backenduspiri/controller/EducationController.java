@@ -7,7 +7,6 @@ import com.portfolio.backenduspiri.services.CloudinaryService;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/education")
-@CrossOrigin( origins = "http://localhost:4200/" )
+@CrossOrigin( origins = "https://uriel-spiridione.web.app/" )
 public class EducationController {
     
     @Autowired
