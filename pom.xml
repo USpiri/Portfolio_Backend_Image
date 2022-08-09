@@ -70,6 +70,11 @@
             <version>2.7.2</version>
             <type>module</type>
         </dependency>
+        <dependency>
+            <groupId>com.cloudinary</groupId>
+            <artifactId>cloudinary-http44</artifactId>
+            <version>1.32.2</version>
+        </dependency>
     </dependencies>
 
     <build>

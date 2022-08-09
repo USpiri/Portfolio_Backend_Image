@@ -3,8 +3,10 @@ package com.portfolio.backenduspiri.controller;
 import com.portfolio.backenduspiri.model.Education;
 import com.portfolio.backenduspiri.service_interface.IEducationService;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
+import com.portfolio.backenduspiri.services.CloudinaryService;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/education")
-@CrossOrigin( origins = "https://uriel-spiridione.web.app" )
+@CrossOrigin( origins = "http://localhost:4200/" )
 public class EducationController {
     
     @Autowired
@@ -31,6 +33,9 @@ public class EducationController {
     
     @Autowired
     private IPersonService personService;
+    
+    @Autowired
+    CloudinaryService cloudinaryService;
     
     @GetMapping
     @ResponseBody
@@ -79,13 +84,9 @@ public class EducationController {
     public Education updateEducationImage( @PathVariable Long id, @RequestParam("education") MultipartFile edu ) throws IOException{
         Education eduToUpdate = educationService.getEducation(id);
         
-        try {
-            byte[] imageBytes = Base64.encodeBase64(edu.getBytes());
-            String stringImage = new String(imageBytes);
-            eduToUpdate.setImg_url(stringImage);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        Map result = cloudinaryService.upload(edu);
+        eduToUpdate.setImg_url(result.get("url").toString());
+        eduToUpdate.setImageId(result.get("public_id").toString());
         
         return educationService.updateEducation(eduToUpdate);
         
@@ -94,6 +95,7 @@ public class EducationController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEducation( @PathVariable Long id ) throws IOException{
+        Map result = cloudinaryService.delete(educationService.getEducation(id).getImageId());
         educationService.deleteEducation(id);
     }
     

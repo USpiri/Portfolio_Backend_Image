@@ -3,8 +3,10 @@ package com.portfolio.backenduspiri.controller;
 import com.portfolio.backenduspiri.model.Experience;
 import com.portfolio.backenduspiri.service_interface.IExperienceService;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
+import com.portfolio.backenduspiri.services.CloudinaryService;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/experience")
-@CrossOrigin( origins = "https://uriel-spiridione.web.app" )
+@CrossOrigin( origins = "http://localhost:4200/" )
 public class ExperienceController {
     
     @Autowired
@@ -31,6 +33,9 @@ public class ExperienceController {
     
     @Autowired
     private IPersonService personService;
+    
+    @Autowired
+    CloudinaryService cloudinaryService;
     
     @GetMapping
     @ResponseBody
@@ -81,13 +86,9 @@ public class ExperienceController {
     public Experience updateExperienceImage( @PathVariable Long id, @RequestParam("experience") MultipartFile exp ) throws IOException{
         Experience expToUpdate = expService.getExperience(id);
         
-        try {
-            byte[] imageBytes = Base64.encodeBase64(exp.getBytes());
-            String stringImage = new String(imageBytes);
-            expToUpdate.setImg_url(stringImage);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        Map result = cloudinaryService.upload(exp);
+        expToUpdate.setImg_url(result.get("url").toString());
+        expToUpdate.setImageId(result.get("public_id").toString());
         
         return expService.updateExperience(expToUpdate);
         
@@ -96,6 +97,7 @@ public class ExperienceController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteExperience( @PathVariable Long id ) throws IOException{
+        Map result = cloudinaryService.delete(expService.getExperience(id).getImageId());
         expService.deleteExperience(id);
     }
     

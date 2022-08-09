@@ -36,8 +36,8 @@ public class Experience {
     @Size( max = 25 , message = "[Experience.end_date] - Not accurate size")
     private String end_date;
     
-    @Size( max = 200 , message = "[Experience.img_url] - Not accurate size")
     private String img_url;
+    private String imageId;
     
     @Size( max = 200 , message = "[Experience.link] - Not accurate size")
     private String link;
@@ -55,7 +55,7 @@ public class Experience {
     public Experience() {
     }
 
-    public Experience(Long id, String company, String job, Boolean is_actual, String start_date, String end_date, String img_url, String link, Boolean enabled_link, String job_type) {
+    public Experience(Long id, String company, String job, Boolean is_actual, String start_date, String end_date, String img_url, String imageId, String link, Boolean enabled_link, String job_type, Person person) {
         this.id = id;
         this.company = company;
         this.job = job;
@@ -63,9 +63,13 @@ public class Experience {
         this.start_date = start_date;
         this.end_date = end_date;
         this.img_url = img_url;
+        this.imageId = imageId;
         this.link = link;
         this.enabled_link = enabled_link;
         this.job_type = job_type;
+        this.person = person;
     }
+
+    
     
 }

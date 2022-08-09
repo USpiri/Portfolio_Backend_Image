@@ -3,8 +3,10 @@ package com.portfolio.backenduspiri.controller;
 import com.portfolio.backenduspiri.model.Project;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
 import com.portfolio.backenduspiri.service_interface.IProjectService;
+import com.portfolio.backenduspiri.services.CloudinaryService;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -23,7 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/project")
-@CrossOrigin( origins = "https://uriel-spiridione.web.app" )
+@CrossOrigin( origins = "http://localhost:4200/" )
 public class ProjectController {
     
     @Autowired
@@ -31,6 +33,9 @@ public class ProjectController {
     
     @Autowired
     private IPersonService personService;
+    
+    @Autowired
+    CloudinaryService cloudinaryService;
     
     @GetMapping
     @ResponseBody
@@ -76,13 +81,9 @@ public class ProjectController {
     public Project updateProjectImage( @PathVariable Long id, @RequestParam("project") MultipartFile edu ) throws IOException{
         Project projectToUpdate = projectService.getProject(id);
         
-        try {
-            byte[] imageBytes = Base64.encodeBase64(edu.getBytes());
-            String stringImage = new String(imageBytes);
-            projectToUpdate.setImg_url(stringImage);
-        } catch (IOException e) {
-            System.out.println(e);
-        }
+        Map result = cloudinaryService.upload(edu);
+        projectToUpdate.setImg_url(result.get("url").toString());
+        projectToUpdate.setImageId(result.get("public_id").toString());
         
         return projectService.updateProject(projectToUpdate);
         
@@ -91,6 +92,7 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteProject( @PathVariable Long id ) throws IOException{
+        Map result = cloudinaryService.delete(projectService.getProject(id).getImageId());
         projectService.deleteProject(id);
     }
     

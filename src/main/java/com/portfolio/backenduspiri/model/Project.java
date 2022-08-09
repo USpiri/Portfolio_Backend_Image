@@ -29,8 +29,8 @@ public class Project {
     @Size( max = 100 , message = "[Project.description] - Not accurate size")
     private String description;
     
-    @Size( max = 200 , message = "[Project.img_url] - Not accurate size")
     private String img_url;
+    private String imageId;
     
     @Size( max = 200 , message = "[Project.link] - Not accurate size")
     private String link;
@@ -46,13 +46,17 @@ public class Project {
     public Project() {
     }
 
-    public Project(Long id, String name, String description, String img_url, String link, boolean enabled_link) {
+    public Project(Long id, String name, String description, String img_url, String imageId, String link, Boolean enabled_link, Person person) {
         this.id = id;
         this.name = name;
         this.description = description;
         this.img_url = img_url;
+        this.imageId = imageId;
         this.link = link;
         this.enabled_link = enabled_link;
+        this.person = person;
     }
+
+    
     
 }

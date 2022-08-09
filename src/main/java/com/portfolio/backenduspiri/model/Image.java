@@ -25,7 +25,11 @@ public class Image {
     
     private String header;
     
+    private String header_id;
+    
     private String about;
+    
+    private String about_id;
     
     @ManyToOne( fetch = FetchType.LAZY, optional = false )
     @JoinColumn( name = "person_id", nullable = false )
@@ -36,10 +40,15 @@ public class Image {
     public Image() {
     }
 
-    public Image(Long id, String header, String about) {
+    public Image(Long id, String header, String header_id, String about, String about_id, Person person) {
         this.id = id;
         this.header = header;
+        this.header_id = header_id;
         this.about = about;
+        this.about_id = about_id;
+        this.person = person;
     }
+
+    
     
 }

@@ -36,8 +36,8 @@ public class Education {
     @Size( max = 25 , message = "[Education.end_date] - Not accurate size")
     private String end_date;
     
-    @Size( max = 200 , message = "[Education.img_url] - Not accurate size")
     private String img_url;
+    private String imageId;
     
     @Size( max = 100 , message = "[Education.link] - Not accurate size")
     private String link;
@@ -53,7 +53,7 @@ public class Education {
     public Education() {
     }
 
-    public Education(Long id, String where, String degree, Boolean is_actual, String start_date, String end_date, String img_url, String link, Boolean enabled_link) {
+    public Education(Long id, String where, String degree, Boolean is_actual, String start_date, String end_date, String img_url, String imageId, String link, Boolean enabled_link, Person person) {
         this.id = id;
         this.where = where;
         this.degree = degree;
@@ -61,8 +61,12 @@ public class Education {
         this.start_date = start_date;
         this.end_date = end_date;
         this.img_url = img_url;
+        this.imageId = imageId;
         this.link = link;
         this.enabled_link = enabled_link;
+        this.person = person;
     }
+
+    
     
 }
