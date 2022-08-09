@@ -7,7 +7,7 @@
 **Dev Journal:** https://github.com/USpiri/Portfolio_ArgPrograma/tree/master/Bit%C3%A1cora  
 #
 
-❗❗❗ **IMPORTANTE:** Este Backend **NO** implementa el Image Management explicado debajo solo maneja base64, ya que Heroku no admite la escritura de archivos, por lo que para un Backend que administra las imagenes dirigirse a [***Backend***](https://github.com/USpiri/Portfolio_ArgPrograma_Backend/) ❗❗❗  
+❗❗❗ **IMPORTANTE:** Este Backend **NO** implementa el Image Management explicado debajo, ya que Heroku no admite la escritura de archivos, por lo que para un Backend que administra las imagenes dirigirse a [***Backend***](https://github.com/USpiri/Portfolio_ArgPrograma_Backend/). Este utiliza conexion a una cuenta [***Cloudinary***](https://cloudinary.com/), por lo que es necesario un registro e una página extra ❗❗❗  
 
 **Este es el Backend implementado en Heroku**
 
@@ -109,6 +109,20 @@ user-photos
     ...
 ```  
 
+# Cloudinary  
+
+Las imágenes **no se guardan el BBDD**, en esta solo se almacena una url que lleva al link de Cloudinary en donde se encuentran almacenadas las imágenes. Esto evita evita almacenar variables muy grandes en BBDD como los ByteArray o base64.  
+
+Para utilizar esta funcion es necesario agregar unas variables en *Application.properties*, el archivo se encuentra en `src/main/resources/application.properties`. **Los campos que DEBEN ser editados** son:  
+
+```yml
+# Cloudinary
+cloud.key = CLOUDINARY-KEY
+cloud.name = CLOUDINARY-CLOUD-NAME
+cloud.secret = CLOUDINARY-SECRET
+```  
+
+Estos datos se obtienen luego del registro en [***Cloudinary***](https://cloudinary.com/), en la pestaña *Dashboard*
 
 # Métodos
 Las siguientes tablas describen cada uno de los diferentes controllers y las funciones de las que administran.
