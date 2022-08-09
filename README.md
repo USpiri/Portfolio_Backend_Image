@@ -7,7 +7,7 @@
 **Dev Journal:** https://github.com/USpiri/Portfolio_ArgPrograma/tree/master/Bit%C3%A1cora  
 #
 
-❗❗❗ **IMPORTANTE:** Este Backend **NO** implementa el Image Management explicado debajo, ya que Heroku no admite la escritura de archivos, por lo que para un Backend que administra las imagenes dirigirse a [***Backend***](https://github.com/USpiri/Portfolio_ArgPrograma_Backend/) ❗❗❗  
+❗❗❗ **IMPORTANTE:** Este Backend **NO** implementa el Image Management explicado debajo solo maneja base64, ya que Heroku no admite la escritura de archivos, por lo que para un Backend que administra las imagenes dirigirse a [***Backend***](https://github.com/USpiri/Portfolio_ArgPrograma_Backend/) ❗❗❗  
 
 **Este es el Backend implementado en Heroku**
 
