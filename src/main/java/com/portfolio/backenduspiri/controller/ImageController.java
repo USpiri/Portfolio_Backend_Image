@@ -3,9 +3,9 @@ package com.portfolio.backenduspiri.controller;
 import com.portfolio.backenduspiri.model.Image;
 import com.portfolio.backenduspiri.service_interface.IImageService;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
-import com.portfolio.backenduspiri.util.FileUploadUtil;
 import java.io.IOException;
 import java.util.List;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/image")
@@ -61,18 +60,16 @@ public class ImageController {
     public Image updateImage( @PathVariable Long id, @RequestParam("image") MultipartFile[] image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
         
-        String apiURL = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/";
-        String uploadDir = "user-photos/" + imgToUpdate.getPerson().getId();//
-        String header = "header.jpg";
-        String about = "about.jpg";
-        
-        //Updates Image Object
-        imgToUpdate.setHeader(apiURL + uploadDir + "/" + header);
-        imgToUpdate.setAbout(apiURL + uploadDir + "/" + about);
-        
-        //Save images in folders
-        FileUploadUtil.saveFile(uploadDir, header, image[0]);
-        FileUploadUtil.saveFile(uploadDir, about, image[1]);
+        try {
+            byte[] headerB = Base64.encodeBase64(image[0].getBytes());
+            String header = new String(headerB);
+            byte[] aboutB = Base64.encodeBase64(image[1].getBytes());
+            String about = new String(aboutB);
+            imgToUpdate.setHeader(header);
+            imgToUpdate.setAbout(about);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
         
         return imgService.updateImage(imgToUpdate);
     }
@@ -82,15 +79,13 @@ public class ImageController {
     public Image updateHeaderImage( @PathVariable Long id, @RequestParam("image") MultipartFile image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
         
-        String apiURL = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/";
-        String uploadDir = "user-photos/" + imgToUpdate.getPerson().getId();//
-        String header = "header.jpg";
-        
-        //Updates Image Object
-        imgToUpdate.setHeader(apiURL + uploadDir + "/" + header);
-        
-        //Save images in folders
-        FileUploadUtil.saveFile(uploadDir, header, image);
+        try {
+            byte[] headerB = Base64.encodeBase64(image.getBytes());
+            String header = new String(headerB);
+            imgToUpdate.setHeader(header);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
         
         return imgService.updateImage(imgToUpdate);
     }
@@ -100,15 +95,13 @@ public class ImageController {
     public Image updateAboutImage( @PathVariable Long id, @RequestParam("image") MultipartFile image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
         
-        String apiURL = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/";
-        String uploadDir = "user-photos/" + imgToUpdate.getPerson().getId();
-        String about = "about.jpg";
-        
-        //Updates Image Object
-        imgToUpdate.setAbout(apiURL + uploadDir + "/" + about);
-        
-        //Save images in folders
-        FileUploadUtil.saveFile(uploadDir, about, image);
+        try {
+            byte[] aboutB = Base64.encodeBase64(image.getBytes());
+            String about = new String(aboutB);
+            imgToUpdate.setAbout(about);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
         
         return imgService.updateImage(imgToUpdate);
     }

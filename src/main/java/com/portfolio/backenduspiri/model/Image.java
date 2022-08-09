@@ -23,10 +23,8 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
-    @Size( max = 200 , message = "[Image.header] - Not accurate size")
     private String header;
     
-    @Size( max = 200 , message = "[Image.about] - Not accurate size")
     private String about;
     
     @ManyToOne( fetch = FetchType.LAZY, optional = false )

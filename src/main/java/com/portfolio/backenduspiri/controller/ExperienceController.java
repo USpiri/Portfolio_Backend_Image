@@ -3,9 +3,9 @@ package com.portfolio.backenduspiri.controller;
 import com.portfolio.backenduspiri.model.Experience;
 import com.portfolio.backenduspiri.service_interface.IExperienceService;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
-import com.portfolio.backenduspiri.util.FileUploadUtil;
 import java.io.IOException;
 import java.util.List;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/experience")
@@ -82,14 +81,13 @@ public class ExperienceController {
     public Experience updateExperienceImage( @PathVariable Long id, @RequestParam("experience") MultipartFile exp ) throws IOException{
         Experience expToUpdate = expService.getExperience(id);
         
-        String apiURL = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/";
-        String uploadDir = "user-photos/" + expToUpdate.getPerson().getId() + "/experience";
-        
-        //Updates Image Object
-        expToUpdate.setImg_url(apiURL + uploadDir + "/" + expToUpdate.getId() + ".jpg");
-        
-        //Save images in folders
-        FileUploadUtil.saveFile(uploadDir, expToUpdate.getId() + ".jpg", exp);
+        try {
+            byte[] imageBytes = Base64.encodeBase64(exp.getBytes());
+            String stringImage = new String(imageBytes);
+            expToUpdate.setImg_url(stringImage);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
         
         return expService.updateExperience(expToUpdate);
         
@@ -98,10 +96,6 @@ public class ExperienceController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteExperience( @PathVariable Long id ) throws IOException{
-        String fileDir = "user-photos/" + expService.getExperience(id).getPerson().getId() + "/experience";
-        String fileName = id + ".jpg";
-        
-        FileUploadUtil.deleteFile(fileDir, fileName);
         expService.deleteExperience(id);
     }
     

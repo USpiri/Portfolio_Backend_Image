@@ -3,9 +3,9 @@ package com.portfolio.backenduspiri.controller;
 import com.portfolio.backenduspiri.model.Education;
 import com.portfolio.backenduspiri.service_interface.IEducationService;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
-import com.portfolio.backenduspiri.util.FileUploadUtil;
 import java.io.IOException;
 import java.util.List;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
 @RequestMapping("/education")
@@ -77,17 +76,16 @@ public class EducationController {
     
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("/{id}/image")
-    public Education updateEducationImage( @PathVariable Long id, @RequestParam("education") MultipartFile exp ) throws IOException{
+    public Education updateEducationImage( @PathVariable Long id, @RequestParam("education") MultipartFile edu ) throws IOException{
         Education eduToUpdate = educationService.getEducation(id);
         
-        String apiURL = ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString() + "/";
-        String uploadDir = "user-photos/" + eduToUpdate.getPerson().getId() + "/education";
-        
-        //Updates Image Object
-        eduToUpdate.setImg_url(apiURL + uploadDir + "/" + eduToUpdate.getId() + ".jpg");
-        
-        //Save images in folders
-        FileUploadUtil.saveFile(uploadDir, eduToUpdate.getId() + ".jpg", exp);
+        try {
+            byte[] imageBytes = Base64.encodeBase64(edu.getBytes());
+            String stringImage = new String(imageBytes);
+            eduToUpdate.setImg_url(stringImage);
+        } catch (IOException e) {
+            System.out.println(e);
+        }
         
         return educationService.updateEducation(eduToUpdate);
         
@@ -96,10 +94,6 @@ public class EducationController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEducation( @PathVariable Long id ) throws IOException{
-        String fileDir = "user-photos/" + educationService.getEducation(id).getPerson().getId() + "/education";
-        String fileName = id + ".jpg";
-        
-        FileUploadUtil.deleteFile(fileDir, fileName);
         educationService.deleteEducation(id);
     }
     

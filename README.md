@@ -2,9 +2,14 @@
 **Page:**  
 **FrontEnd:** https://github.com/USpiri/Portfolio_ArgPrograma/  
 **BackEnd:** https://github.com/USpiri/Portfolio_ArgPrograma_Backend/  
+**Backend without Image Managment:** https://github.com/USpiri/Portfolio_Backend_NoImage/  
 **Preview:** https://uspiri.github.io/  
 **Dev Journal:** https://github.com/USpiri/Portfolio_ArgPrograma/tree/master/Bit%C3%A1cora  
 #
+
+❗❗❗ **IMPORTANTE:** Este Backend **NO** implementa el Image Management explicado debajo, ya que Heroku no admite la escritura de archivos, por lo que para un Backend que administra las imagenes dirigirse a [***Backend***](https://github.com/USpiri/Portfolio_ArgPrograma_Backend/) ❗❗❗  
+
+**Este es el Backend implementado en Heroku**
 
 Este repositorio es parte de un proyecto **Full Stack**, este es la implementación de un BackEnd programado en Java con SpringBoot para el curso #YoProgramo de Argentina Programa implementando dependencias como Lombok, Spring DevTools, Spring Web, Spring Security, JWT, Spring Data JPA, MySQL Driver y Validation. Esta diseñado para administrar los datos y trabajar en conjunto con el [***Portfolio FrontEnd***](https://github.com/USpiri/Portfolio_ArgPrograma/), mandar mails y administrar las imagenes del sitio.  
 El proyecto cuenta con 7 packages principales en donde cada uno se encarga de tareas especificas. El package ***Security*** tiene a su vez diferentes sub-packages para administrar su funcionamiento.  
