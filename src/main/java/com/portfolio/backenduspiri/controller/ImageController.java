@@ -65,11 +65,11 @@ public class ImageController {
         Image imgToUpdate = imgService.getImage(id);
         
         Map resultH = cloudinaryService.upload(image[0]);
-        imgToUpdate.setHeader(resultH.get("url").toString());
+        imgToUpdate.setHeader(resultH.get("secure_url").toString());
         imgToUpdate.setHeader_id(resultH.get("public_id").toString());
         
         Map resultA = cloudinaryService.upload(image[1]);
-        imgToUpdate.setAbout(resultA.get("url").toString());
+        imgToUpdate.setAbout(resultA.get("secure_url").toString());
         imgToUpdate.setAbout_id(resultA.get("public_id").toString());
         
         return imgService.updateImage(imgToUpdate);
@@ -81,7 +81,7 @@ public class ImageController {
         Image imgToUpdate = imgService.getImage(id);
         
         Map resultH = cloudinaryService.upload(image);
-        imgToUpdate.setHeader(resultH.get("url").toString());
+        imgToUpdate.setHeader(resultH.get("secure_url").toString());
         imgToUpdate.setHeader_id(resultH.get("public_id").toString());
         
         return imgService.updateImage(imgToUpdate);
@@ -92,8 +92,11 @@ public class ImageController {
     public Image updateAboutImage( @PathVariable Long id, @RequestParam("image") MultipartFile image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
         
+        cloudinaryService.delete(imgToUpdate.getHeader_id());
+        cloudinaryService.delete(imgToUpdate.getAbout_id());
+        
         Map resultA = cloudinaryService.upload(image);
-        imgToUpdate.setAbout(resultA.get("url").toString());
+        imgToUpdate.setAbout(resultA.get("secure_url").toString());
         imgToUpdate.setAbout_id(resultA.get("public_id").toString());
         
         return imgService.updateImage(imgToUpdate);
@@ -103,8 +106,8 @@ public class ImageController {
     @DeleteMapping("/{id}")
     public void deleteImage( @PathVariable Long id ) throws IOException{
         
-        Map resultH = cloudinaryService.delete(imgService.getImage(id).getHeader_id());
-        Map resultA = cloudinaryService.delete(imgService.getImage(id).getAbout_id());
+        cloudinaryService.delete(imgService.getImage(id).getHeader_id());
+        cloudinaryService.delete(imgService.getImage(id).getAbout_id());
         
         imgService.deleteImage(id);
     }

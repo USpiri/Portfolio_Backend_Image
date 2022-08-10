@@ -80,8 +80,10 @@ public class ProjectController {
     public Project updateProjectImage( @PathVariable Long id, @RequestParam("project") MultipartFile edu ) throws IOException{
         Project projectToUpdate = projectService.getProject(id);
         
+        cloudinaryService.delete(projectToUpdate.getImageId());
+        
         Map result = cloudinaryService.upload(edu);
-        projectToUpdate.setImg_url(result.get("url").toString());
+        projectToUpdate.setImg_url(result.get("secure_url").toString());
         projectToUpdate.setImageId(result.get("public_id").toString());
         
         return projectService.updateProject(projectToUpdate);
@@ -91,7 +93,7 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteProject( @PathVariable Long id ) throws IOException{
-        Map result = cloudinaryService.delete(projectService.getProject(id).getImageId());
+        cloudinaryService.delete(projectService.getProject(id).getImageId());
         projectService.deleteProject(id);
     }
     

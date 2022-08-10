@@ -83,8 +83,10 @@ public class EducationController {
     public Education updateEducationImage( @PathVariable Long id, @RequestParam("education") MultipartFile edu ) throws IOException{
         Education eduToUpdate = educationService.getEducation(id);
         
+        cloudinaryService.delete(eduToUpdate.getImageId());
+        
         Map result = cloudinaryService.upload(edu);
-        eduToUpdate.setImg_url(result.get("url").toString());
+        eduToUpdate.setImg_url(result.get("secure_url").toString());
         eduToUpdate.setImageId(result.get("public_id").toString());
         
         return educationService.updateEducation(eduToUpdate);
@@ -94,7 +96,7 @@ public class EducationController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEducation( @PathVariable Long id ) throws IOException{
-        Map result = cloudinaryService.delete(educationService.getEducation(id).getImageId());
+        cloudinaryService.delete(educationService.getEducation(id).getImageId());
         educationService.deleteEducation(id);
     }
     

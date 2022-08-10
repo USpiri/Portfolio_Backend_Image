@@ -85,8 +85,10 @@ public class ExperienceController {
     public Experience updateExperienceImage( @PathVariable Long id, @RequestParam("experience") MultipartFile exp ) throws IOException{
         Experience expToUpdate = expService.getExperience(id);
         
+        cloudinaryService.delete(expToUpdate.getImageId());
+        
         Map result = cloudinaryService.upload(exp);
-        expToUpdate.setImg_url(result.get("url").toString());
+        expToUpdate.setImg_url(result.get("secure_url").toString());
         expToUpdate.setImageId(result.get("public_id").toString());
         
         return expService.updateExperience(expToUpdate);
@@ -96,7 +98,7 @@ public class ExperienceController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteExperience( @PathVariable Long id ) throws IOException{
-        Map result = cloudinaryService.delete(expService.getExperience(id).getImageId());
+        cloudinaryService.delete(expService.getExperience(id).getImageId());
         expService.deleteExperience(id);
     }
     
