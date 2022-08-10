@@ -1,12 +1,16 @@
 package com.portfolio.backenduspiri;
 
+import com.portfolio.backenduspiri.model.Image;
 import com.portfolio.backenduspiri.model.Person;
+import com.portfolio.backenduspiri.model.SocialMedia;
 import com.portfolio.backenduspiri.security.entity.Role;
 import com.portfolio.backenduspiri.security.entity.Users;
 import com.portfolio.backenduspiri.security.enums.ERole;
 import com.portfolio.backenduspiri.security.service.RoleService;
 import com.portfolio.backenduspiri.security.service.UserService;
+import com.portfolio.backenduspiri.service_interface.IImageService;
 import com.portfolio.backenduspiri.service_interface.IPersonService;
+import com.portfolio.backenduspiri.service_interface.ISocialMediaService;
 import java.util.HashSet;
 import java.util.Set;
 import org.springframework.beans.factory.annotation.Value;
@@ -30,10 +34,12 @@ public class BackendUspiriApplication {
     }
     
     @Bean
-    public CommandLineRunner defaultData(IPersonService svcP, RoleService svcR, PasswordEncoder passEncoder, UserService svcU) {
+    public CommandLineRunner defaultData(IPersonService svcP, RoleService svcR, PasswordEncoder passEncoder, IImageService svcI, ISocialMediaService svcS, UserService svcU) {
         return args -> { 
             if (svcP.getPeople().isEmpty()) { 
                 svcP.createPerson(new Person(1l, "", "", "", "", "", "", "", "", ""));
+                svcI.createImage(new Image(1l, "", "", "", "", svcP.getPerson(1l)));
+                svcS.createSocialMedia(new SocialMedia(1l, "", "", "", "", "", "", svcP.getPerson(1l)));
                 svcR.save(new Role(ERole.ROLE_ADMIN));
                 svcR.save(new Role(ERole.ROLE_USER));
                 Users user = new Users(defaultUsername, passEncoder.encode(defaultPassword));

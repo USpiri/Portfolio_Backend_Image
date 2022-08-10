@@ -50,7 +50,7 @@ public class SocialMedia {
     public SocialMedia() {
     }
 
-    public SocialMedia(Long id, String facebook, String twitter, String instagram, String github, String linkedin, String cv) {
+    public SocialMedia(Long id, String facebook, String twitter, String instagram, String github, String linkedin, String cv, Person person) {
         this.id = id;
         this.facebook = facebook;
         this.twitter = twitter;
@@ -58,6 +58,7 @@ public class SocialMedia {
         this.github = github;
         this.linkedin = linkedin;
         this.cv = cv;
+        this.person = person;
     }
     
 }
