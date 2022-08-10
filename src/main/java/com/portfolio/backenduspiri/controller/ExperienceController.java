@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/experience")
-@CrossOrigin( origins = "https://uriel-spiridione.web.app/" )
+@CrossOrigin( origins = {"https://uriel-spiridione.web.app/","http://localhost:4200/"} )
 public class ExperienceController {
     
     @Autowired
@@ -84,9 +84,9 @@ public class ExperienceController {
     @PutMapping("/{id}/image")
     public Experience updateExperienceImage( @PathVariable Long id, @RequestParam("experience") MultipartFile exp ) throws IOException{
         Experience expToUpdate = expService.getExperience(id);
-        
-        cloudinaryService.delete(expToUpdate.getImageId());
-        
+        if (!expToUpdate.getImg_url().isEmpty()) {
+            cloudinaryService.delete(expToUpdate.getImageId());
+        }
         Map result = cloudinaryService.upload(exp);
         expToUpdate.setImg_url(result.get("secure_url").toString());
         expToUpdate.setImageId(result.get("public_id").toString());

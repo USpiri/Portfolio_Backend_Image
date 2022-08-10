@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/image")
-@CrossOrigin( origins = "https://uriel-spiridione.web.app/" )
+@CrossOrigin( origins = {"https://uriel-spiridione.web.app/","http://localhost:4200/"} )
 public class ImageController {
     
     @Autowired
@@ -63,7 +63,10 @@ public class ImageController {
     @PutMapping("/{id}") //SAVE TWO IMAGES
     public Image updateImage( @PathVariable Long id, @RequestParam("image") MultipartFile[] image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
-        
+        if (!imgToUpdate.getHeader_id().isEmpty() || !imgToUpdate.getAbout_id().isEmpty() ) {
+            cloudinaryService.delete(imgToUpdate.getHeader_id());
+            cloudinaryService.delete(imgToUpdate.getAbout_id());
+        }
         Map resultH = cloudinaryService.upload(image[0]);
         imgToUpdate.setHeader(resultH.get("secure_url").toString());
         imgToUpdate.setHeader_id(resultH.get("public_id").toString());
@@ -79,7 +82,9 @@ public class ImageController {
     @PutMapping("/{id}/header") //SAVE Header IMAGE
     public Image updateHeaderImage( @PathVariable Long id, @RequestParam("image") MultipartFile image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
-        
+        if (!imgToUpdate.getHeader_id().isEmpty()) {
+            cloudinaryService.delete(imgToUpdate.getHeader_id());
+        }
         Map resultH = cloudinaryService.upload(image);
         imgToUpdate.setHeader(resultH.get("secure_url").toString());
         imgToUpdate.setHeader_id(resultH.get("public_id").toString());
@@ -91,10 +96,9 @@ public class ImageController {
     @PutMapping("/{id}/about") //SAVE About IMAGE
     public Image updateAboutImage( @PathVariable Long id, @RequestParam("image") MultipartFile image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
-        
-        cloudinaryService.delete(imgToUpdate.getHeader_id());
-        cloudinaryService.delete(imgToUpdate.getAbout_id());
-        
+        if (!imgToUpdate.getAbout_id().isEmpty()) {
+            cloudinaryService.delete(imgToUpdate.getAbout_id());
+        }
         Map resultA = cloudinaryService.upload(image);
         imgToUpdate.setAbout(resultA.get("secure_url").toString());
         imgToUpdate.setAbout_id(resultA.get("public_id").toString());

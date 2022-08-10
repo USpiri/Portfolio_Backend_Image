@@ -24,7 +24,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/education")
-@CrossOrigin( origins = "https://uriel-spiridione.web.app/" )
+@CrossOrigin( origins = {"https://uriel-spiridione.web.app/","http://localhost:4200/"} )
 public class EducationController {
     
     @Autowired
@@ -82,9 +82,9 @@ public class EducationController {
     @PutMapping("/{id}/image")
     public Education updateEducationImage( @PathVariable Long id, @RequestParam("education") MultipartFile edu ) throws IOException{
         Education eduToUpdate = educationService.getEducation(id);
-        
-        cloudinaryService.delete(eduToUpdate.getImageId());
-        
+        if (!eduToUpdate.getImg_url().isEmpty()) {
+            cloudinaryService.delete(eduToUpdate.getImageId());
+        }
         Map result = cloudinaryService.upload(edu);
         eduToUpdate.setImg_url(result.get("secure_url").toString());
         eduToUpdate.setImageId(result.get("public_id").toString());

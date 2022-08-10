@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/jobtype")
-@CrossOrigin( origins = "https://uriel-spiridione.web.app/" )
+@CrossOrigin( origins = {"https://uriel-spiridione.web.app/","http://localhost:4200/"} )
 public class JobTypeController {
     
     @Autowired
