@@ -93,7 +93,9 @@ public class ProjectController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteProject( @PathVariable Long id ) throws IOException{
-        cloudinaryService.delete(projectService.getProject(id).getImageId());
+        if (!projectService.getProject(id).getImg_url().isEmpty()) {
+            cloudinaryService.delete(projectService.getProject(id).getImageId());
+        }
         projectService.deleteProject(id);
     }
     

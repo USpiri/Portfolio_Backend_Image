@@ -63,8 +63,10 @@ public class ImageController {
     @PutMapping("/{id}") //SAVE TWO IMAGES
     public Image updateImage( @PathVariable Long id, @RequestParam("image") MultipartFile[] image ) throws IOException{
         Image imgToUpdate = imgService.getImage(id);
-        if (!imgToUpdate.getHeader_id().isEmpty() || !imgToUpdate.getAbout_id().isEmpty() ) {
+        if (!imgToUpdate.getHeader_id().isEmpty() ) {
             cloudinaryService.delete(imgToUpdate.getHeader_id());
+        }
+        if (!imgToUpdate.getAbout_id().isEmpty()) {
             cloudinaryService.delete(imgToUpdate.getAbout_id());
         }
         Map resultH = cloudinaryService.upload(image[0]);
@@ -109,10 +111,12 @@ public class ImageController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteImage( @PathVariable Long id ) throws IOException{
-        
-        cloudinaryService.delete(imgService.getImage(id).getHeader_id());
-        cloudinaryService.delete(imgService.getImage(id).getAbout_id());
-        
+        if (!imgService.getImage(id).getHeader_id().isEmpty() ) {
+            cloudinaryService.delete(imgService.getImage(id).getHeader_id());
+        }
+        if (!imgService.getImage(id).getAbout_id().isEmpty()) {
+            cloudinaryService.delete(imgService.getImage(id).getAbout_id());
+        }
         imgService.deleteImage(id);
     }
     

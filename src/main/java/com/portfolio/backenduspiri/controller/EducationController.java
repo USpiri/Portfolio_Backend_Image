@@ -96,7 +96,9 @@ public class EducationController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteEducation( @PathVariable Long id ) throws IOException{
-        cloudinaryService.delete(educationService.getEducation(id).getImageId());
+        if (!educationService.getEducation(id).getImg_url().isEmpty()) {
+            cloudinaryService.delete(educationService.getEducation(id).getImageId());
+        }
         educationService.deleteEducation(id);
     }
     

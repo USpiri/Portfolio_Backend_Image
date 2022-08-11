@@ -98,7 +98,9 @@ public class ExperienceController {
     @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("/{id}")
     public void deleteExperience( @PathVariable Long id ) throws IOException{
-        cloudinaryService.delete(expService.getExperience(id).getImageId());
+        if (!expService.getExperience(id).getImg_url().isEmpty()) {
+            cloudinaryService.delete(expService.getExperience(id).getImageId());
+        }
         expService.deleteExperience(id);
     }
     
